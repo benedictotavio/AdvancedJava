@@ -1,5 +1,4 @@
 # Paraleslimo
-
 - São excuções feitas em paralelo
 
 ## Monothreaded
@@ -70,6 +69,8 @@ t1.start(); // Inicia a thread novamente
 
  > OBS: O método run() é sincronizado, ou seja, apenas uma thread executa esse método por vez
 
+> OBS: Por sua vez isso acaba com o paralelismo, pois apenas uma thread executa o método run()
+
 
  - Tambem podemos sincronizar um bloco de código
 
@@ -80,3 +81,64 @@ t1.start(); // Inicia a thread novamente
  }
  }
 ```
+
+> O Sincronizado é uma forma de sincronizar o acesso a um recurso compartilhado por várias threads.
+
+
+## Não use o Synchronized
+- Não use o Synchronized em coleções como List, Set, Map, etc.
+  - Pois isso pode causar problemas de concorrência
+  - Elas não são thread-safe, ou seja, não são preparadas para serem usadas em ambientes concorrentes
+  - Em caso de lista podemos usar o syncronizedList
+
+  ```
+  List<String> list = Collections.synchronizedList(new ArrayList<>()); // Cria uma lista sincronizada(thread-safe)
+  // Para adicionar um elemento na lista
+  synchronized (list) {
+    list.add("Elemento"); // o método add() é sincronizado
+  }
+  ```
+
+  - Tambem existem as classes ConcurrentHashMap, ConcurrentSkipListMap, ConcurrentSkipListSet, etc.
+
+
+### Collections para Threads
+- CopyOnWriteArrayList
+  - É uma lista thread-safe que permite a adição de elementos
+  - É uma classe bem pesada, pois cria uma cópia da lista para adicionar um elemento
+  - É uma boa opção para listas que não são muito grandes
+
+- ConcurrentHashMap
+  - É uma classe thread-safe que permite a adição e remoção de elementos.
+  - Alternativa thread-safe para HashMap
+  - Assm como todas as classes thread-safe, é menos perfomatica por precisar sincronizar o acesso aos dados
+
+- LinkedBlockingQueue
+  - É uma fila thread-safe que permite a adição e remoção de elementos
+  - É uma boa opção para filas que não são muito grandes
+  - é possivel definir o tamanho máximo da fila
+
+  ``java
+  LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>(10);
+  queue.add("Elemento"); // Adiciona um elemento na fila
+  queue.remove(); // Remove um elemento da fila
+  ```
+
+- LinkedBlockingDeque
+  - É uma fila thread-safe que permite a adição e remoção de elementos no inicio e no final da fila
+  - É uma boa opção para filas que não são muito grandes
+
+## Operações Atômicas
+- Operações que são executadas de forma atômica, ou seja, não podem ser interrompidas
+
+#### AtomicInteger
+- É uma classe que permite a criação de um inteiro atômico
+- É uma classe thread-safe
+
+#### AtomicLong
+- É uma classe que permite a criação de um long atômico
+- É uma classe thread-safe
+
+#### AtomicBoolean
+- É uma classe que permite a criação de um boolean atômico
+- É uma classe thread-safe
