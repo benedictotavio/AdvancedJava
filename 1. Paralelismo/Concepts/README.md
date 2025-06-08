@@ -142,3 +142,74 @@ t1.start(); // Inicia a thread novamente
 #### AtomicBoolean
 - É uma classe que permite a criação de um boolean atômico
 - É uma classe thread-safe
+
+
+### CyclicBarrier
+- É uma classe que permite a criação de uma barreira de sincronização
+- É uma classe thread-safe
+- É uma boa opção para sincronizar threads
+- Uma thread ira experar pela outra thread
+- É uma boa opção para sincronizar threads que precisam esperar por outras threads
+
+```java
+ Runnable r1 = () -> {
+            System.out.println(
+                    4323d * 3d);
+            await(cyclicBarrier); // Aguarda a outra thread
+        };
+
+        Runnable r2 = () -> {
+            System.out.println(
+                    Math.pow(
+                            3d, 20d));
+            await(cyclicBarrier);
+        };
+
+        Runnable r3 = () -> {
+            System.out.println(
+                    4323d * 3d);
+            await(cyclicBarrier);
+        };
+```
+
+
+# Tambem consguimos colocar a execução principal em uma thread separada
+```java
+ Runnable finish = () -> {
+        System.out.println("All threads finished");
+        double sum = 0;
+        sum += deque.poll();
+        sum += deque.poll();
+        sum += deque.poll();
+        System.out.println("Sum is " + sum);
+};
+
+CyclicBarrier cyclicBarrier = new CyclicBarrier(3, finish); // Cria uma barreira de sincronização
+
+// Assim podemos colocar a execução principal em uma thread separada
+
+// Essa thread só sera executada quando todas as threads forem executadas
+```
+> Pode ser usado para gerar relatórios, apos todo o processamento do produto ele ira gerar um relatório.
+
+### CountDownLatch
+- É uma classe que permite a criação de uma barreira de sincronização
+
+
+### Semáforo
+- É uma classe que permite a criação de um semáforo!
+- Limita a quantidade de Threads em uma execução!
+- Exemplo:
+  - Se tiver apenas 3 vagas
+  - ⁠as 3 primeiras Threads que chegarem ao ponto do semana irão ser executadas, as outras irá esperar serem executadas
+  - ⁠Conforme vai surgindo vagas, nossas Threads são liberadas.
+  - ⁠Essa é uma forma de limitar a quantidade de Threads em uma execução
+
+### Locks
+- Similar ao synchronized
+- Evita concorrencias entre Threads
+- É uma forma de sincronizar o acesso a um recurso compartilhado por várias threads
+
+
+### Syncronous Queue
+- 
