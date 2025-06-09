@@ -212,4 +212,23 @@ CyclicBarrier cyclicBarrier = new CyclicBarrier(3, finish); // Cria uma barreira
 
 
 ### Syncronous Queue
+- Cria uma lista syncrona
+- Funcionamento: 
+  - Podemos adicionar elementos na lista
+  - POdemos pegar elementos da lista
+  - mas só podemos adicionar ou pegar um elemento por vez
+- Utilizado para executar tarefas de forma sincronizada
+- Utlizado como evento.
+
+### Exchange
+- É uma classe que permite a troca de valores entre threads
+- Diferente do Syncronous Queue, o Exchange ira retornar o valor trocado para producer.
+- É uma boa opção para trocar valores entre threads
+
+### CompletableFuture
+- Similar ao async/await do javascript
+- 
+
+
+### Paralelismo JavaEE
 - 

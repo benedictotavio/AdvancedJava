@@ -11,6 +11,7 @@ import services.chart.ChartService;
 import services.payment.ExecutePayment;
 import services.payment.ExecutePaymentImpl;
 import services.reports.ReportsService;
+import services.salesforce.SalesforceService;
 
 public class App {
 
@@ -25,13 +26,13 @@ public class App {
         ExecutorService executors = Executors.newCachedThreadPool();
 
         // Só permite 2 tarefas simultâneas no recurso "restrito"
-        Semaphore semaforo = new Semaphore(2);
+        Semaphore semaforo = new Semaphore(3);
 
         // Protege uma seção crítica exclusiva (mesmo entre os 2 que entram)
         Lock lock = new ReentrantLock();
 
         // Aguarda 3 tarefas antes de executar o relatório
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(2, () -> {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3, () -> {
             ReportsService reportsService = new ReportsService();
             reportsService.generateReport();
         });
@@ -58,7 +59,7 @@ public class App {
                     ChartService chartService = new ChartService();
                     try {
                         semaforo.acquire();
-                        chartService.executeWithThread(10);
+                        chartService.executeWithCompletionService(10);
                     } catch (ExecutionException | InterruptedException e) {
                         System.out.println("App.processPayment()" + e.getMessage());
                         e.printStackTrace();
@@ -71,6 +72,23 @@ public class App {
                     }
                 });
 
+        executors.submit(() -> {
+            SalesforceService salesforceService = new SalesforceService();
+            try {
+                semaforo.acquire();
+                salesforceService.send();
+            } catch (InterruptedException e) {
+                System.out.println("App.processPayment()" + e.getMessage());
+                e.printStackTrace();
+            }
+            try {
+                cyclicBarrier.await();
+            } catch (InterruptedException | BrokenBarrierException e) {
+                System.out.println("App.processPayment()" + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+        
         executors.shutdown();
     }
 }
