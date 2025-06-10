@@ -227,7 +227,41 @@ CyclicBarrier cyclicBarrier = new CyclicBarrier(3, finish); // Cria uma barreira
 
 ### CompletableFuture
 - Similar ao async/await do javascript
-- 
+- Executar tarefas em segundo plano
+- Execução não bloqueadora
+- É uma boa opção para executar tarefas em segundo plano
+- Procesamento assíncrono
+- Exemplo:
+  - Busca em um banco de dados
+  - Busca em um arquivo
+  - Busca em uma API externa
+- Podemos realizar outras tarefas enquanto a tarefa em segundo plano é executada
+- Adiantar a execução de uma tarefa
+- Adicionada na versão 8 do Java
+
+```java
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
+
+// Podemos realizar outras tarefas enquanto a tarefa em segundo plano é executada
+
+String result = future.get(); // Bloqueia até que a tarefa em segundo plano seja executada
+```
+
+- é possivel fazer uma cadeia de tarefas
+
+```java
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello")
+        .thenApply(s -> s + " World")
+        .thenApply(s -> s + "!");
+String result = future.get(); // Bloqueia até que a tarefa em segundo plano seja executada
+```
+
+#### CompletableFuture x Threads
+- Deadlock
+  - Thread 1:
+  - Thread 1: Aguarda Thread 2
+  - Thread 2:
+  - Thread 2: Aguarda Thread 1
 
 
 ### Paralelismo JavaEE
